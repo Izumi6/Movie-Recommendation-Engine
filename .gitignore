@@ -54,3 +54,6 @@ Thumbs.db
 # Logs
 *.log
 .vercel
+
+# Local project reports (do not publish to GitHub)
+report/

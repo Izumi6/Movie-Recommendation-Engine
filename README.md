@@ -144,23 +144,15 @@ Movie-Recommendation-Engine/
 │       ├── tags.csv                # User-assigned freeform metadata
 │       └── links.csv               # IMDb and TMDb cross-reference IDs
 │
-├── src/
-│   ├── __init__.py                 # Package marker
-│   ├── data_loader.py              # Data ingestion, cleaning, and preprocessing
-│   ├── feature_engine.py           # Text processing and TF-IDF vectorization
-│   ├── content_recommender.py      # Cosine similarity recommendation engine
-│   ├── collaborative_recommender.py# SVD matrix factorization engine
-│   ├── hybrid_recommender.py       # Weighted linear blend recommender
-│   ├── evaluation.py               # Quantitative validation and metric calculation
-│   └── utils.py                    # Formatter helpers and UI components
-│
-└── report/
-    ├── Movie_Recommendation_System_Report.pdf   # Formal two-page academic report
-    ├── Movie_Recommendation_System_Report.docx  # Editable Word document
-    ├── REPORT.md                                # Markdown report version
-    ├── generate_report.py                       # PDF generation script
-    ├── generate_docx.py                         # Word document generation script
-    └── genre_correlation_heatmap.png            # Genre co-occurrence correlation matrix
+└── src/
+    ├── __init__.py                 # Package marker
+    ├── data_loader.py              # Data ingestion, cleaning, and preprocessing
+    ├── feature_engine.py           # Text processing and TF-IDF vectorization
+    ├── content_recommender.py      # Cosine similarity recommendation engine
+    ├── collaborative_recommender.py# SVD matrix factorization engine
+    ├── hybrid_recommender.py       # Weighted linear blend recommender
+    ├── evaluation.py               # Quantitative validation and metric calculation
+    └── utils.py                    # Formatter helpers and UI components
 ```
 
 ---
@@ -223,16 +215,6 @@ python setup_data.py
   ```bash
   python3 -m http.server 8000 --directory public
   ```
-
----
-
-## Academic and Project Reports
-
-A formal academic project report following institutional submission standards is available in the [`report/`](report/) directory:
-
-- [Movie_Recommendation_System_Report.pdf](report/Movie_Recommendation_System_Report.pdf): Formatted two-page document containing problem formulation, architectural design, correlation heatmap, executable code block, and evaluation results.
-- [Movie_Recommendation_System_Report.docx](report/Movie_Recommendation_System_Report.docx): Fully styled Microsoft Word version for academic review and printing.
-- [REPORT.md](report/REPORT.md): Clean Markdown transcript.
 
 ---
 
