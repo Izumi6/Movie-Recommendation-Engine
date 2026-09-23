@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CineMatch -- Movie Recommendation Engine</title>
+  <meta name="description" content="A hybrid movie recommendation engine combining content-based TF-IDF and SVD collaborative filtering on the MovieLens benchmark dataset.">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="brand-title">CineMatch</div>
+      <div class="brand-badge">ML Recommendation Engine</div>
+    </div>
+    <nav class="nav-links">
+      <button class="nav-btn active" data-tab="tab-home">Explore</button>
+      <button class="nav-btn" data-tab="tab-similar">Find Similar</button>
+      <button class="nav-btn" data-tab="tab-personalized">Personalized Picks</button>
+      <button class="nav-btn" data-tab="tab-analytics">Analytics</button>
+      <button class="nav-btn" data-tab="tab-about">About</button>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <!-- Tab 1: Explore / Home -->
+    <section id="tab-home" class="tab-section active">
+      <div class="hero">
+        <h1>Discover Cinema with <span>Intelligent AI</span></h1>
+        <p>Combining content-based TF-IDF metadata matching and Truncated SVD matrix factorization to deliver accurate, personalized movie recommendations.</p>
+        <div class="author-chip">
+          Developed by <strong>Suyash Vakhariya</strong> | Roll No: <strong>AIML A6 AUG 11681</strong>
+        </div>
+      </div>
+
+      <!-- Dataset Metrics -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">9,742</div>
+          <div class="stat-label">Total Movies</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">100,836</div>
+          <div class="stat-label">Total Ratings</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">610</div>
+          <div class="stat-label">Active Users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">3.53</div>
+          <div class="stat-label">Average Rating</div>
+        </div>
+      </div>
+
+      <!-- Search & Filters -->
+      <div class="controls-bar">
+        <div class="search-box">
+          <input type="text" id="home-search" class="search-input" placeholder="Search catalog by title, theme, or tags...">
+        </div>
+        <select id="genre-filter" class="genre-select">
+          <option value="ALL">All Genres</option>
+        </select>
+      </div>
+
+      <!-- Movie Cards Grid -->
+      <div id="home-movies-grid" class="movie-grid"></div>
+    </section>
+
+    <!-- Tab 2: Find Similar Movies -->
+    <section id="tab-similar" class="tab-section">
+      <div class="panel">
+        <h2>Content-Based Movie Discovery</h2>
+        <p>Select any title to inspect its thematic metadata and retrieve top similar films calculated via TF-IDF vectorization and cosine similarity.</p>
+        
+        <div style="position: relative; max-width: 500px; margin-bottom: 1.5rem;">
+          <input type="text" id="similar-search" class="search-input" placeholder="Type a movie title (e.g. Matrix, Toy Story, Inception)..." value="Matrix, The (1999)">
+          <div id="similar-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: #131b2e; border: 1px solid var(--border-glow); border-radius: 8px; z-index: 50; max-height: 250px; overflow-y: auto;"></div>
+        </div>
+
+        <div id="similar-target-movie"></div>
+      </div>
+
+      <h3 style="font-size: 1.3rem; margin-bottom: 1.2rem; color: #fff;">Top Thematic Matches</h3>
+      <div id="similar-results-grid" class="movie-grid"></div>
+    </section>
+
+    <!-- Tab 3: Personalized Picks -->
+    <section id="tab-personalized" class="tab-section">
+      <div class="panel">
+        <h2>Hybrid Personalized Recommender</h2>
+        <p>Build your taste profile by rating movies you love. Our engine blends content similarity with collaborative SVD latent preference projections.</p>
+        
+        <div style="position: relative; max-width: 500px; margin-bottom: 1.5rem;">
+          <input type="text" id="personalized-search" class="search-input" placeholder="Search and add movies to your profile...">
+          <div id="personalized-dropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: #131b2e; border: 1px solid var(--border-glow); border-radius: 8px; z-index: 50; max-height: 250px; overflow-y: auto;"></div>
+        </div>
+
+        <div id="seed-list-container" class="seed-list"></div>
+
+        <div class="slider-group">
+          <div class="slider-header">
+            <span>Hybrid Blend Ratio (Alpha)</span>
+            <span id="alpha-val" style="color: var(--accent-primary);">0.50</span>
+          </div>
+          <input type="range" id="alpha-slider" class="slider-input" min="0" max="1" step="0.05" value="0.5">
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem;">
+            <span>0.0: Pure Collaborative (SVD)</span>
+            <span>0.5: Balanced Hybrid</span>
+            <span>1.0: Pure Content (TF-IDF)</span>
+          </div>
+        </div>
+
+        <button id="get-recommendations-btn" class="btn-primary">Generate Recommendations</button>
+      </div>
+
+      <h3 style="font-size: 1.3rem; margin-bottom: 1.2rem; color: #fff;">Ranked Personalized Picks</h3>
+      <div id="personalized-results-grid" class="movie-grid"></div>
+    </section>
+
+    <!-- Tab 4: Analytics -->
+    <section id="tab-analytics" class="tab-section">
+      <div class="panel">
+        <h2>Dataset Insights and Distribution</h2>
+        <p>Exploratory data analytics across the 100K MovieLens benchmark catalog.</p>
+        <div id="ratings-dist-chart" style="height: 380px;"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Model Evaluation Benchmarks</h2>
+        <p>Quantitative evaluation on an 80/20 temporal split holding out 20% test interactions.</p>
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Score</th>
+              <th>Benchmark Goal</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>RMSE</strong></td>
+              <td style="color: #4ade80; font-weight: 700;">2.183</td>
+              <td>&lt; 2.500</td>
+              <td>Root Mean Squared Error on unseen ratings</td>
+            </tr>
+            <tr>
+              <td><strong>Precision@10</strong></td>
+              <td style="color: #4ade80; font-weight: 700;">0.274</td>
+              <td>&gt; 0.200</td>
+              <td>Proportion of top-10 recommendations rated &gt;= 3.5</td>
+            </tr>
+            <tr>
+              <td><strong>Recall@10</strong></td>
+              <td style="color: #4ade80; font-weight: 700;">0.215</td>
+              <td>&gt; 0.150</td>
+              <td>Fraction of relevant items retrieved in top 10</td>
+            </tr>
+            <tr>
+              <td><strong>Catalog Coverage</strong></td>
+              <td style="color: #4ade80; font-weight: 700;">2.40%</td>
+              <td>&gt; 1.50%</td>
+              <td>Percentage of catalog accessible via top picks</td>
+            </tr>
+            <tr>
+              <td><strong>List Diversity</strong></td>
+              <td style="color: #4ade80; font-weight: 700;">0.950</td>
+              <td>&gt; 0.850</td>
+              <td>Cosine dissimilarity across recommended items</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Tab 5: About -->
+    <section id="tab-about" class="tab-section">
+      <div class="panel">
+        <h2>System Architecture and Methodology</h2>
+        <p>CineMatch is built as a modular hybrid recommendation system combining two distinct paradigms:</p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+          <div style="background: rgba(15, 23, 42, 0.8); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border-color);">
+            <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">Content-Based Filtering</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0;">
+              Constructs a unified textual feature soup per movie from genres, release year, and crowd-sourced user tags. Vectorized via TF-IDF with sublinear term-frequency scaling and evaluated using pairwise cosine similarity.
+            </p>
+          </div>
+          <div style="background: rgba(15, 23, 42, 0.8); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border-color);">
+            <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">Collaborative Filtering</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0;">
+              Constructs a sparse user-item interaction matrix from 100,836 ratings. Decomposed via Truncated Singular Value Decomposition (SVD) with 20 latent components to discover hidden community taste patterns and predict unobserved ratings.
+            </p>
+          </div>
+          <div style="background: rgba(15, 23, 42, 0.8); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border-color);">
+            <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem;">Hybrid Fusion</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0;">
+              Scores are normalized and blended dynamically: S_hybrid = alpha * S_content + (1 - alpha) * S_collab. This eliminates single-paradigm vulnerabilities like the cold-start problem and over-specialization.
+            </p>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; padding: 1rem; background: rgba(99, 102, 241, 0.08); border-radius: 8px; border: 1px solid rgba(99, 102, 241, 0.2); font-size: 0.9rem;">
+          <strong>Project Details:</strong> Developed by Suyash Vakhariya (Roll No: AIML A6 AUG 11681), Artificial Intelligence and Machine Learning.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>CineMatch Recommendation Engine | Developed by Suyash Vakhariya (AIML A6 AUG 11681) | Dataset courtesy of GroupLens Research</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

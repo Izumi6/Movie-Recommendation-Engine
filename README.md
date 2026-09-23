@@ -3,13 +3,23 @@
 **Author:** Suyash Vakhariya  
 **Roll No:** AIML A6 AUG 11681  
 **Specialization:** Artificial Intelligence and Machine Learning  
-**Repository:** [https://github.com/Izumi6/Movie-Recommendation-Engine](https://github.com/Izumi6/Movie-Recommendation-Engine)  
+**Live Vercel Deployment:** [https://cinematch-movie-recommendation-engi.vercel.app](https://cinematch-movie-recommendation-engi.vercel.app)  
+**GitHub Repository:** [https://github.com/Izumi6/Movie-Recommendation-Engine](https://github.com/Izumi6/Movie-Recommendation-Engine)  
 
 ---
 
 ## Abstract
 
 With the rapid growth of digital streaming catalogs, consumers encounter substantial choice overload when navigating thousands of titles. Recommender systems mitigate this challenge by transforming historical interactions and catalog metadata into actionable preference predictions. This project presents an end-to-end movie recommendation engine developed on the benchmark MovieLens dataset, consisting of 100,836 ratings across 9,742 movies evaluated by 610 users. To address the fundamental limitations of single-paradigm architectures, such as the cold-start problem in collaborative filtering and over-specialization in content-based filtering, we implement a robust hybrid framework. The content-based module vectorizes textual features, including pipe-separated genres, extracted release years, and crowd-sourced user tags, using Term Frequency-Inverse Document Frequency (TF-IDF) with sublinear term scaling and computes pairwise cosine similarity for thematic discovery. The collaborative filtering module decomposes the sparse user-item interaction matrix via Truncated Singular Value Decomposition (SVD), capturing twenty latent preference factors to predict ratings for unobserved items. A tunable linear parameter dynamically balances immediate content relevance and collaborative community discovery across distinct user personas. Data preprocessing handles sparsity, normalizes numerical distributions, and aggregates tags into unified feature vectors. The engine is deployed through an interactive Streamlit web dashboard providing dynamic catalog exploration, item-to-item similarity lookups, personalized multi-movie taste profiling, and offline model benchmarking. Empirical evaluation using an 80/20 temporal split demonstrates an RMSE of 2.183, Precision@10 of 0.274, Recall@10 of 0.215, and a list diversity index of 0.950 across generated recommendations. The resulting architecture delivers an interpretable, highly responsive, and scalable foundation for personalized content discovery in modern streaming environments.
+
+---
+
+## Live Deployments
+
+| Platform | Deployment URL | Description |
+|---|---|---|
+| **Vercel** | [https://cinematch-movie-recommendation-engi.vercel.app](https://cinematch-movie-recommendation-engi.vercel.app) | Live production build running the full client-side hybrid recommendation suite, catalog search, and analytics. |
+| **Streamlit Local / Cloud** | `http://localhost:8501` | Full interactive Python dashboard with on-demand SVD training and live parameter tuning. |
 
 ---
 
@@ -31,7 +41,7 @@ graph TD
     H --> I
     
     I --> J["Evaluation Suite<br/>evaluation.py<br/>RMSE, Precision@K, Recall@K, Diversity"]
-    I --> K["Interactive Web Dashboard<br/>Streamlit UI (app.py)"]
+    I --> K["Interactive Web Dashboard<br/>Streamlit UI & Vercel Web App"]
 ```
 
 ---
@@ -112,10 +122,20 @@ Movie-Recommendation-Engine/
 ├── requirements.txt                # Python package dependencies
 ├── setup_data.py                   # Automated MovieLens dataset downloader
 ├── README.md                       # Comprehensive documentation
+├── vercel.json                     # Vercel deployment configuration
 ├── .gitignore                      # Git exclusion rules
 │
+├── public/                         # Vercel production web application
+│   ├── index.html                  # Single-page application markup
+│   ├── style.css                   # Dark glassmorphism styles
+│   ├── app.js                      # Client-side hybrid recommendation engine
+│   └── data/                       # Pre-compiled model weights and catalog
+│       ├── movies.json             # 9,742 movie records and metadata
+│       ├── content_similar.json    # TF-IDF cosine similarity nearest neighbors
+│       └── svd_model.json          # SVD item latent factor matrices (k=20)
+│
 ├── assets/
-│   └── style.css                   # Dark glassmorphism theme and typography
+│   └── style.css                   # Streamlit custom styling
 │
 ├── data/
 │   └── ml-latest-small/            # MovieLens dataset CSV files
@@ -147,7 +167,7 @@ Movie-Recommendation-Engine/
 
 ## User Interface Modules
 
-The Streamlit web application comprises five dedicated views:
+The web applications (both Vercel and Streamlit versions) comprise five dedicated views:
 
 1. **Home / Explore:** High-level metrics (catalog count, rating volume, active user base), dynamic genre filtering, searchable catalog table, and interactive distribution visualizations.
 2. **Find Similar Movies:** Item-to-item content retrieval with interactive movie lookup, feature importance breakdown, and similarity score badges.
@@ -193,13 +213,16 @@ python setup_data.py
 
 *Note: The dataset is already included in `data/ml-latest-small/` for immediate execution.*
 
-### 5. Launch the Web Application
+### 5. Launch Locally
 
-```bash
-streamlit run app.py
-```
-
-The application will be accessible at `http://localhost:8501` (or `http://localhost:8502` if port 8501 is occupied).
+- **Streamlit App:**
+  ```bash
+  streamlit run app.py
+  ```
+- **Vercel Web App (Static Server):**
+  ```bash
+  python3 -m http.server 8000 --directory public
+  ```
 
 ---
 

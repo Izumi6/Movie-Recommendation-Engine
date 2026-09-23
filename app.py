@@ -988,3 +988,13 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# WSGI/ASGI compatibility stub for deployment platforms
+def application(environ, start_response):
+    start_response('200 OK', [('Content-Type', 'text/plain')])
+    return [b"CineMatch Recommendation Engine"]
+
+app = application
+handler = application
+
