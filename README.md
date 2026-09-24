@@ -1,10 +1,24 @@
-# CineMatch: Movie Recommendation Engine
+<div align="center">
 
-**Author:** Suyash Vakhariya  
-**Roll No:** AIML A6 AUG 11681  
-**Specialization:** Artificial Intelligence and Machine Learning  
-**Live Vercel Deployment:** [https://cinematch-movie-recommendation-engi.vercel.app](https://cinematch-movie-recommendation-engi.vercel.app)  
-**GitHub Repository:** [https://github.com/Izumi6/Movie-Recommendation-Engine](https://github.com/Izumi6/Movie-Recommendation-Engine)  
+# 🎬 CineMatch: Hybrid Movie Recommendation Engine
+
+### Latent Factor Matrix Factorization (Truncated SVD) & TF-IDF Cosine Similarity on MovieLens (100K+ Ratings)
+
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Application-Vercel-black?style=for-the-badge&logo=vercel)](https://cinematch-movie-recommendation-engi.vercel.app)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/Izumi6/Movie-Recommendation-Engine)
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Dataset-MovieLens_100K-orange?style=flat-square" alt="MovieLens" />
+  <img src="https://img.shields.io/badge/Collaborative_Filtering-Truncated_SVD_(k=20)-blue?style=flat-square" alt="SVD" />
+  <img src="https://img.shields.io/badge/Content_Filtering-TF--IDF_+_Cosine_Sim-purple?style=flat-square" alt="TF-IDF" />
+  <img src="https://img.shields.io/badge/List_Diversity-0.950-brightgreen?style=flat-square" alt="Diversity" />
+  <img src="https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" alt="Streamlit" />
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="License" />
+</p>
+
+*An end-to-end personalized recommender system that solves the cold-start and over-specialization paradox by blending collaborative filtering (SVD matrix decomposition) with deep content similarity (TF-IDF metadata soup).*
+
+</div>
 
 ---
 
